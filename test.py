@@ -14,13 +14,14 @@ gameBoard = [ [0,0,0], [0,0,0], [0,0,0] ]
 currentTurn = 1
 winningPlayer = 0
 
+
 def HasAnyoneWon():
 
     global winningPlayer
     
     # check rows
     for i in gameBoard:
-        if i[0] == i[1] == [2]:
+        if(i[0] == i[1] == i[2]):
             if(i[0] == -1):
                 print("Player won!")
                 winningPlayer = -1
@@ -29,53 +30,20 @@ def HasAnyoneWon():
                 print("Computer won!")
                 winningPlayer = -2
                 return True
-            else:
-                return False
 
+    # check columns
+    for i,v in enumerate(gameBoard[0]):
+        if(v == gameBoard[1][i] == gameBoard[2][i]):
+            if(v == -1):
+                print("Player won!")
+                winningPlayer = -1
+                return True
+            elif(v == -2):
+                print("Computer won!")
+                winningPlayer = -2
+                return True
 
-
-    # check if the first column is equal
-    if(gameBoard[0][0] == gameBoard[1][0] == gameBoard[2][0]):
-        if(gameBoard[0][0] == -1):
-            print("Player won!")
-            winningPlayer = -1
-            return True
-        elif(gameBoard[0][0] == -2):
-            print("Computer won!")
-            winningPlayer = -2
-            return True
-        else:
-            return False
-
-    # check if the second column is equal
-    if(gameBoard[0][1] == gameBoard[1][1] == gameBoard[2][1]):
-        if(gameBoard[0][1] == -1):
-            print("Player won!")
-            winningPlayer = -1
-            return True
-        elif(gameBoard[0][1] == -2):
-            print("Computer won!")
-            winningPlayer = -2
-            return True
-        else:
-            return False
-
-    # check if the third column is equal
-    if(gameBoard[0][2] == gameBoard[1][2] == gameBoard[2][2]):
-        if(gameBoard[0][2] == -1):
-            print("Player won!")
-            winningPlayer = -1
-            return True
-        elif(gameBoard[0][2] == -2):
-            print("Computer won!")
-            winningPlayer = -2
-            return True
-        else:
-            return False
-
-
-
-    # check if the first diagnol is equal
+    # check TL-BR diagnol
     if(gameBoard[0][0] == gameBoard[1][1] == gameBoard[2][2]):
         if(gameBoard[0][0] == -1):
             print("Player won!")
@@ -85,10 +53,8 @@ def HasAnyoneWon():
             print("Computer won!")
             winningPlayer = -2
             return True
-        else:
-            return False
 
-    # check if the second diagnol is equal
+    # check BL-TR diagnol
     if(gameBoard[0][2] == gameBoard[1][1] == gameBoard[2][0]):
         if(gameBoard[0][2] == -1):
             print("Player won!")
@@ -98,12 +64,17 @@ def HasAnyoneWon():
             print("Computer won!")
             winningPlayer = -2
             return True
-        else:
-            return False
+
+    rowsWithOpenSpaces = 0
+
+    # check for draw
+    for i in gameBoard:
+        if(0 in i):
+            rowsWithOpenSpaces += 1
 
 
-
-    return False
+    # if nobody's won anything yet...
+    return False if rowsWithOpenSpaces > 0 else True
 
 def PrintGameBoard(gameBoard):
 
@@ -122,7 +93,7 @@ def SetGameboard(selection, user):
     column = 1 if selection % 3 == 0 else (2 if selection % 3 == 1 else 3)
 
     gameBoard[row-1][column-1] = -1 if user == -1 else -2
-    
+
 def IsSpotTaken(selection):
 
     selection = int(selection) - 1
@@ -130,7 +101,6 @@ def IsSpotTaken(selection):
     column = 1 if selection % 3 == 0 else (2 if selection % 3 == 1 else 3)
 
     return True if gameBoard[row-1][column-1] != 0 else False
-
 
 
 while(HasAnyoneWon() == False):
@@ -142,7 +112,7 @@ while(HasAnyoneWon() == False):
     if(currentTurn == 1):
         
         # get user selection
-        userSelection = input("Please select a spot: ")
+        userSelection = input("\nPlease select a spot: ")
 
         # check if the user's selection is invalid
         while(userSelection.isnumeric() == False or int(userSelection) > 9 or int(userSelection) < 1 or IsSpotTaken(userSelection)):
@@ -163,8 +133,7 @@ while(HasAnyoneWon() == False):
         SetGameboard(userSelection, -2)
 
     currentTurn = 2 if currentTurn == 1 else 1
-        
 
 clear()
 PrintGameBoard(gameBoard)
-print("\nPlayer wins!" if winningPlayer == -1 else ("Computer wins!" if winningPlayer == -2 else "It's a draw!"))
+print("\n" + ("Player wins!" if winningPlayer == -1 else ("Computer wins!" if winningPlayer == -2 else "It's a draw!")))
