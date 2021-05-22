@@ -5,10 +5,11 @@ import os
 from sys import platform
 
 # sets up terminal clear
-if(platform == "win32"):
+if(platform == "win32"):    # for windows
     clear = lambda: os.system('cls')
-elif platform == "darwin":
+elif platform == "darwin":  # for mac
     clear = lambda: os.system('clear')
+
 
 gameBoard = [ [0,0,0], [0,0,0], [0,0,0] ]
 currentTurn = 1
@@ -16,7 +17,7 @@ winningPlayer = 0
 
 
 def HasAnyoneWon():
-
+    """Checks if any players have won."""
     global winningPlayer
     
     # check rows
@@ -77,24 +78,33 @@ def HasAnyoneWon():
     return False if rowsWithOpenSpaces > 0 else True
 
 def PrintGameBoard(gameBoard):
+    """Prints the gameboard out to the console."""
 
+    currentSpot = 1
+
+    clear()
+    
     for i in gameBoard:
-        spotOne = str("X" if i[0] == -1 else "O" if i[0] == -2 else i[0])
-        spotTwo = str("X" if i[1] == -1 else "O" if i[1] == -2 else i[1])
-        spotThree = str("X" if i[2] == -1 else "O" if i[2] == -2 else i[2])
+        spotOne = str("X" if i[0] == -1 else "O" if i[0] == -2 else currentSpot)
+        currentSpot += 1
+        spotTwo = str("X" if i[1] == -1 else "O" if i[1] == -2 else currentSpot)
+        currentSpot += 1
+        spotThree = str("X" if i[2] == -1 else "O" if i[2] == -2 else currentSpot)
+        currentSpot += 1
 
         print("| " + spotOne + " | " + spotTwo + " | " + spotThree + " |")
 
 def SetGameboard(selection, user):
+    """Sets a spot on the gameboard, using a number and the user making the move."""
 
     selection = int(selection) - 1
-
     row = 3 if selection / 3 >= 2 else (2 if selection / 3 >= 1 else 1)
     column = 1 if selection % 3 == 0 else (2 if selection % 3 == 1 else 3)
 
     gameBoard[row-1][column-1] = -1 if user == -1 else -2
 
 def IsSpotTaken(selection):
+    """Returns a boolean representing whether a spot on the board is already taken. Takes a spot on the board as a parameter."""
 
     selection = int(selection) - 1
     row = 3 if selection / 3 >= 2 else (2 if selection / 3 >= 1 else 1)
@@ -105,7 +115,6 @@ def IsSpotTaken(selection):
 
 while(HasAnyoneWon() == False):
 
-    clear()
     PrintGameBoard(gameBoard)
 
     # Player's Turn
@@ -134,6 +143,5 @@ while(HasAnyoneWon() == False):
 
     currentTurn = 2 if currentTurn == 1 else 1
 
-clear()
 PrintGameBoard(gameBoard)
 print("\n" + ("Player wins!" if winningPlayer == -1 else ("Computer wins!" if winningPlayer == -2 else "It's a draw!")))
