@@ -9,7 +9,7 @@ if(platform == "win32"):
 elif platform == "darwin":
     clear = lambda: os.system('clear')
 
-gameBoard = ['-','-','-','-','-','-','-','-','-']
+gameBoard = [0,0,0,0,0,0,0,0,0]
 
 isUserFinished = False
 currentUsersTurn = 1 if random.randint(0,20) <= 10 else 0
@@ -20,10 +20,14 @@ while(isUserFinished == False):
 
     # Clears the board after every turn.
     clear()
-    print("CURRENT BOARD: ")
-    print("| " + gameBoard[0] + " | "  + gameBoard[1] + " | " + gameBoard[2] + " |\n")
-    print("| " + gameBoard[3] + " | "  + gameBoard[4] + " | " + gameBoard[5] + " |\n")
-    print("| " + gameBoard[6] + " | "  + gameBoard[7] + " | " + gameBoard[8] + " |\n")
+    # print("CURRENT BOARD: ")
+    # print("| " + gameBoard[0] + " | "  + gameBoard[1] + " | " + gameBoard[2] + " |\n")
+    # print("| " + gameBoard[3] + " | "  + gameBoard[4] + " | " + gameBoard[5] + " |\n")
+    # print("| " + gameBoard[6] + " | "  + gameBoard[7] + " | " + gameBoard[8] + " |\n")
+    print_game_board(gameBoard)
+    print(6 % 3)
+    print(5 % 3)
+    print(4 % 3)
 
     #   User's turn
     if(currentUsersTurn == 1):
@@ -46,3 +50,10 @@ while(isUserFinished == False):
 
     
     
+
+def print_game_board(gameboard):
+    for idx, val in gameBoard:
+        if(idx % 3 == 0):
+            print(val + " |\n")
+        else:
+            print("| " + val + " | ")
